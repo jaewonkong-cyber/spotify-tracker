@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>K-pop Spotify Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+:root{--bg:#0a0a0f;--sf:#14141f;--sf2:#1c1c2e;--bd:#2a2a3e;--tx:#e8e8f0;--tx2:#8888a8;--ac:#6366f1;--ac2:#818cf8;--hybe:#ffffff;--sm:#f472b6;--yg:#0a0a0f;--jyp:#3b82f6;--bp:#4a1d3a;--grn:#22c55e;--red:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}.ct{max-width:1440px;margin:0 auto;padding:32px 24px}h1{font-family:Outfit,sans-serif;font-size:32px;font-weight:700;letter-spacing:-0.5px}h1 span{background:linear-gradient(135deg,var(--ac),var(--jyp));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:12px}.badge{background:var(--sf2);padding:6px 14px;border-radius:20px;font-size:12px;color:var(--tx2);border:1px solid var(--bd)}.mc{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}.mci{background:var(--sf);padding:16px 20px;border-radius:14px;border:1px solid var(--bd);position:relative;overflow:hidden}.mci::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%}.mci.HYBE::before{background:var(--hybe)}.mci.SM::before{background:var(--sm)}.mci.YG::before{background:var(--yg)}.mci.JYP::before{background:var(--jyp)}.mci.BP::before{background:var(--bp)}.ml{font-size:11px;color:var(--tx2);font-weight:500;text-transform:uppercase;letter-spacing:1px}.mv{font-size:22px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums}.ms{font-size:12px;color:var(--tx2);margin-top:4px}.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--sf);padding:4px;border-radius:12px;border:1px solid var(--bd);width:fit-content}.tab{padding:10px 20px;background:none;border:none;cursor:pointer;font-size:14px;font-weight:500;color:var(--tx2);border-radius:10px;font-family:inherit;transition:all .2s}.tab:hover{color:var(--tx)}.tab.active{background:var(--ac);color:white}.sec{display:none}.sec.active{display:block}.pn{background:var(--sf);padding:24px;border-radius:16px;margin-bottom:20px;border:1px solid var(--bd)}.pn h2{font-family:Outfit,sans-serif;font-size:18px;font-weight:500;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}.pn h2 .ht{font-size:12px;color:var(--tx2);font-weight:400}.ctr{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center}select,button,input{padding:8px 14px;font-size:13px;border-radius:10px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx);cursor:pointer;font-family:inherit;transition:all .15s}select:focus,button:focus{outline:none;border-color:var(--ac)}button:hover{border-color:var(--ac)}button.pri{background:var(--ac);border-color:var(--ac);color:white}button.pri:hover{background:var(--ac2)}button.q{padding:6px 12px;font-size:12px;border-radius:8px}button.q.on{background:var(--ac);border-color:var(--ac);color:white}.cw{position:relative;height:480px}.pills{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.pill{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:6px;color:white}.pill .x{cursor:pointer;opacity:.7;font-size:14px}.pill .x:hover{opacity:1}table{width:100%;border-collapse:collapse}th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--bd);font-size:13px}th{color:var(--tx2);font-size:11px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;position:sticky;top:0;background:var(--sf)}td.n{text-align:right;font-variant-numeric:tabular-nums}tr:hover{background:var(--sf2)}.lt{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.5px}.lt.HYBE{background:rgba(255,255,255,.15);color:var(--hybe);border:1px solid rgba(255,255,255,.4)}.lt.SM{background:#f472b6;color:#fff}.lt.YG{background:rgba(10,10,15,.85);color:#fef08a;border:1px solid #fef08a}.lt.JYP{background:rgba(59,130,246,.15);color:var(--jyp)}.lt.BP{background:#0a0a0f;color:#ff69b4;border:1px dashed #ff69b4}.pos{color:var(--grn)}.neg{color:var(--red)}.neu{color:var(--tx2)}.zh{text-align:center;padding:8px;font-size:12px;color:var(--tx2)}@media(max-width:768px){.mc{grid-template-columns:repeat(2,1fr)}.cw{height:340px}}
+.evfilt{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-left:auto}
+.evfilt .lbl{font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px;margin-right:4px}
+.evchip{padding:5px 11px;font-size:12px;border-radius:20px;border:1px solid var(--bd);background:var(--sf2);color:var(--tx2);cursor:pointer;user-select:none;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.evchip:hover{border-color:var(--ac);color:var(--tx)}
+.evchip.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.evchip.on.comeback{background:#a855f7;border-color:#a855f7}
+.evchip.on.tour{background:#14b8a6;border-color:#14b8a6}
+.evchip.on.festival{background:#f59e0b;border-color:#f59e0b}
+.evchip.on.other{background:#94a3b8;border-color:#94a3b8}
+.panbtn{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:56px;background:rgba(20,20,31,0.85);border:1px solid var(--bd);color:var(--tx);font-size:18px;border-radius:8px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;transition:all .15s;opacity:.6}
+.panbtn:hover{opacity:1;background:var(--ac);border-color:var(--ac);color:#fff}
+.panbtn-l{left:8px}
+.panbtn-r{right:8px}
+.upGroup{margin-bottom:28px}
+.upGroupHdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--bd)}
+.upGroupHdr .artName{font-family:Outfit,sans-serif;font-size:17px;font-weight:700}
+.upGroupHdr .cnt{background:var(--sf2);color:var(--tx2);padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.upCard{display:grid;grid-template-columns:80px 1fr auto;gap:16px;align-items:center;background:var(--sf2);padding:16px 20px;border-radius:12px;margin-bottom:10px;border:1px solid var(--bd);transition:all .15s}
+.upCard:hover{border-color:var(--ac);transform:translateX(2px)}
+.upDday{text-align:center;padding:10px 0;border-radius:8px;font-weight:700}
+.upDday .big{font-size:18px;letter-spacing:-.5px;display:block}
+.upDday .small{font-size:10px;opacity:.7;margin-top:2px}
+.upDday.d0{background:#ef4444;color:#fff}
+.upDday.d7{background:#f59e0b;color:#fff}
+.upDday.d30{background:var(--ac);color:#fff}
+.upDday.dlater{background:var(--sf);color:var(--tx2)}
+.upInfo .upType{font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.upInfo .upTitle{font-size:15px;font-weight:600;color:var(--tx);line-height:1.4}
+.upInfo .upNote{font-size:12px;color:var(--tx2);margin-top:4px}
+.upDate{color:var(--tx2);font-size:12px;font-family:monospace;text-align:right;white-space:nowrap}
+.upEmpty{text-align:center;padding:60px 20px;color:var(--tx2)}
+.upEmpty .big{font-size:40px;margin-bottom:12px}
+</style></head><body>
+<div class="ct">
+<div class="hd"><div><h1>&#127925; <span>Spotify</span> Tracker</h1></div>
+<div style="display:flex;gap:10px;align-items:center">
+<span class="badge" id="info"></span>
+<input type="file" id="csvF" accept=".csv" style="display:none">
+<button class="q" onclick="document.getElementById('csvF').click()">&#128194; CSV</button>
+</div></div>
+<div class="mc" id="cards"></div>
+<div class="tabs">
+<button class="tab active" data-s="artists">아티스트 추이</button>
+<button class="tab" data-s="ranking">랭킹</button>
+<button class="tab" data-s="table">전체 표</button>
+<button class="tab" data-s="labels">기획사</button>
+<button class="tab" data-s="upcoming">📅 다가오는 이벤트</button>
+</div>
+<div id="artists" class="sec active"><div class="pn">
+<h2>아티스트별 월 청취자수 추이 <span class="ht">Wheel=Zoom · Drag=Move</span></h2>
+<div class="ctr" id="qb">
+<button class="q on" onclick="qs('top5',this)">TOP 5</button>
+<button class="q" onclick="qs('top10',this)">TOP 10</button>
+<button class="q" onclick="qs('HYBE',this)">HYBE</button>
+<button class="q" onclick="qs('SM',this)">SM</button>
+<button class="q" onclick="qs('YG',this)">YG</button>
+<button class="q" onclick="qs('BP',this)">BP Solo</button>
+<button class="q" onclick="qs('JYP',this)">JYP</button>
+<button class="q" onclick="qs('bts',this)">BTS</button>
+<button class="q" onclick="qs('bp',this)">BP All</button>
+<button class="q" onclick="resetZ()">&#128269;</button>
+</div>
+<div class="pills" id="pills"></div>
+<div class="ctr" id="evBar" style="margin-bottom:10px">
+<span class="lbl" style="font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.5px">Events</span>
+<span class="evchip on comeback" data-ev="comeback">&#128191; 컴백</span>
+<span class="evchip on tour" data-ev="tour">&#127908; 공연/투어</span>
+<span class="evchip on festival" data-ev="festival">&#127914; 페스티벌</span>
+<span class="evchip on other" data-ev="other">&#128226; 기타</span>
+<span class="evchip" data-ev="off" id="evOff">전체 OFF</span>
+</div>
+<div class="cw" style="position:relative"><canvas id="ac"></canvas>
+<button class="panbtn panbtn-l" onclick="panChart(-1)" title="왼쪽으로 이동">&#10094;</button>
+<button class="panbtn panbtn-r" onclick="panChart(1)" title="오른쪽으로 이동">&#10095;</button>
+</div>
+<div class="zh">&#128161; Wheel=Zoom · &#10094; &#10095; 버튼으로 이동 · &#128073; 이벤트 아이콘 클릭하면 상세 정보</div>
+</div></div>
+<div id="ranking" class="sec"><div class="pn">
+<h2>랭킹 <span class="ht" id="rd"></span></h2>
+<div class="ctr">
+<select id="rl"><option value="">전체</option><option value="HYBE">HYBE</option><option value="SM">SM</option><option value="YG">YG</option><option value="BP">BP Solo</option><option value="JYP">JYP</option></select>
+<button class="pri" onclick="copyR()">&#128203; Copy</button>
+</div>
+<div style="max-height:600px;overflow-y:auto"><table id="rt"><thead><tr><th>#</th><th>Label</th><th>Artist</th><th class="n">Listeners</th><th class="n">Diff</th><th class="n">%</th></tr></thead><tbody></tbody></table></div>
+</div></div>
+<div id="table" class="sec"><div class="pn">
+<h2>전체 데이터</h2>
+<div class="ctr">
+<select id="tl"><option value="">전체</option><option value="HYBE">HYBE</option><option value="SM">SM</option><option value="YG">YG</option><option value="BP">BP Solo</option><option value="JYP">JYP</option></select>
+<button class="pri" onclick="copyM()">&#128203; Copy</button>
+<button onclick="dlC()">&#128190; CSV</button>
+</div>
+<div style="overflow-x:auto;max-height:600px;overflow-y:auto"><table id="mt"></table></div>
+</div></div>
+<div id="labels" class="sec">
+<div class="pn"><h2>기획사별 총 월 청취자수</h2>
+<div class="cw"><canvas id="lc"></canvas></div></div>
+<div class="pn"><h2>기획사 비중</h2>
+<div class="cw" style="height:320px"><canvas id="pc"></canvas></div></div>
+</div>
+<div id="upcoming" class="sec">
+<div class="pn">
+<h2>📅 다가오는 이벤트 <span class="ht" id="upCount"></span></h2>
+<div class="ctr" style="margin-bottom:20px">
+<button class="q on" onclick="upFilter('all',this)">전체</button>
+<button class="q" onclick="upFilter('comeback',this)">💿 컴백</button>
+<button class="q" onclick="upFilter('tour',this)">🎤 공연/투어</button>
+<button class="q" onclick="upFilter('festival',this)">🎪 페스티벌</button>
+<button class="q" onclick="upFilter('other',this)">📢 기타</button>
+<button class="pri" onclick="showAddForm()" style="margin-left:auto">＋ 이벤트 추가</button>
+</div>
+<div id="addForm" style="display:none;background:var(--sf2);padding:20px;border-radius:12px;margin-bottom:20px;border:1px solid var(--bd)">
+<h3 style="font-size:14px;margin-bottom:14px;color:var(--tx);font-family:Outfit,sans-serif">새 이벤트 추가</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+<div><label style="font-size:11px;color:var(--tx2);display:block;margin-bottom:4px">날짜</label><input type="date" id="af_date" style="width:100%"></div>
+<div><label style="font-size:11px;color:var(--tx2);display:block;margin-bottom:4px">아티스트</label><input type="text" id="af_artist" placeholder="예: JENNIE" style="width:100%"></div>
+<div><label style="font-size:11px;color:var(--tx2);display:block;margin-bottom:4px">타입</label><select id="af_type" style="width:100%"><option value="comeback">💿 컴백</option><option value="tour">🎤 공연/투어</option><option value="festival">🎪 페스티벌</option></select></div>
+<div><label style="font-size:11px;color:var(--tx2);display:block;margin-bottom:4px">제목</label><input type="text" id="af_title" placeholder="예: Ruby Tour" style="width:100%"></div>
+</div>
+<div style="margin-bottom:12px"><label style="font-size:11px;color:var(--tx2);display:block;margin-bottom:4px">비고 (선택)</label><input type="text" id="af_note" placeholder="예: 서울 고척돔" style="width:100%"></div>
+<div style="display:flex;gap:8px;justify-content:flex-end">
+<button onclick="hideAddForm()">취소</button>
+<button class="pri" onclick="addEvent()">＋ 추가하고 CSV 다운로드</button>
+</div>
+<div style="font-size:11px;color:var(--tx2);margin-top:10px">💡 추가된 이벤트는 CSV 파일로 다운로드돼. 기존 events.csv에 붙여넣기 해줘.</div>
+</div>
+<div id="upList"></div>
+</div></div>
+</div>
+<script>
+var ED=/*DATA_PLACEHOLDER*/[];
+var EV=/*EV_DATA_PLACEHOLDER*/[];
+var EVF={comeback:true,tour:true,festival:true,other:true};
+var EVCFG={comeback:{icon:"\uD83D\uDCBF",color:"#a855f7",label:"컴백"},tour:{icon:"\uD83C\uDFA4",color:"#14b8a6",label:"공연/투어"},festival:{icon:"\uD83C\uDFAA",color:"#f59e0b",label:"페스티벌"},other:{icon:"\uD83D\uDCE2",color:"#94a3b8",label:"기타"}};
+var P=["#6366f1","#22c55e","#f59e0b","#3b82f6","#14b8a6","#f97316","#06b6d4","#d946ef","#84cc16","#fb7185","#0ea5e9","#fbbf24","#a3e635","#e879f9","#38bdf8","#c084fc"];
+/* 아티스트별 고정 색상 (없으면 팔레트 P 순환) */
+var AC={
+  JENNIE:"#ef4444",      // 빨강
+  BTS:"#a855f7",         // 보라
+  BLACKPINK:"#ec4899",   // 핑크
+  ROSE:"#f59e0b",        // 주황 (장미 느낌)
+  KATSEYE:"#22c55e"      // 초록 (눈)
+};
+function artistColor(name,idx){return AC[name]||P[idx%P.length]}
+var LC={HYBE:"#ffffff",SM:"#f472b6",YG:"#eab308",BP:"#ff69b4",JYP:"#3b82f6"};
+/* YG는 순검정이면 안 보이니까 차트에선 노란색 계열로 보정. BP는 점선 처리 (SM과 구분) */
+var LC_DASH={BP:[8,4]};
+var BM=["BTS","Jimin","Jungkook","V","RM","SUGA","j-hope","Jin"];
+var BPM=["BLACKPINK","JISOO","JENNIE","ROSE","LISA"];
+var raw=[],ch={},sel=[];
+function init(){raw=ED.map(function(r){return{date:r.d,label:r.l,artist:r.a,listeners:r.m}});si();render()}
+document.getElementById("csvF").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){pCSV(ev.target.result);si();render()};r.readAsText(f,"utf-8")});
+function pCSV(t){var ls=t.split(/\r?\n/).filter(function(l){return l.trim()});if(ls.length<2)return;var h=ls[0].replace(/^\uFEFF/,"").split(",").map(function(s){return s.trim()});raw=ls.slice(1).map(function(line){var p=sC(line),o={};h.forEach(function(k,i){o[k]=(p[i]||"").trim()});o.listeners=parseInt(o.monthly_listeners)||0;return o}).filter(function(r){return r.listeners>0})}
+function sC(l){var r=[],c="",q=false;for(var i=0;i<l.length;i++){var x=l[i];if(x==='"')q=!q;else if(x===","&&!q){r.push(c);c=""}else c+=x}r.push(c);return r}
+function si(){var d=gD();document.getElementById("info").textContent=raw.length+" | "+d.length+"d ("+d[0]+" ~ "+d[d.length-1]+")"}
+function gD(){return Array.from(new Set(raw.map(function(r){return r.date}))).sort()}
+function gA(){return Array.from(new Set(raw.map(function(r){return r.artist})))}
+function la(){return gD().pop()}
+function pv(){var d=gD();return d.length>1?d[d.length-2]:null}
+function fN(n){return n.toLocaleString()}
+function fM(n){return n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(0)+"K":n+""}
+function render(){rCards();qs("top5",document.querySelector(".on"));rRank();rMat();rLC();rPie();rUpcoming();document.getElementById("rl").onchange=rRank;document.getElementById("tl").onchange=rMat}
+function rCards(){var l=la(),p=pv();document.getElementById("cards").innerHTML=["HYBE","SM","YG","JYP"].map(function(lb){var t=raw.filter(function(r){return r.date===l&&r.label===lb}).reduce(function(s,r){return s+r.listeners},0);var y=p?raw.filter(function(r){return r.date===p&&r.label===lb}).reduce(function(s,r){return s+r.listeners},0):0;var c=y>0?((t-y)/y*100):0;var cnt=raw.filter(function(r){return r.date===l&&r.label===lb}).length;var ct=y>0?"<span class='"+(c>=0?"pos":"neg")+"'>"+(c>=0?"\u25B2":"\u25BC")+Math.abs(c).toFixed(2)+"%</span>":"<span class='neu'>\u2014</span>";return "<div class='mci "+lb+"'><div class='ml'>"+lb+" \u00B7 "+cnt+"</div><div class='mv'>"+fN(t)+"</div><div class='ms'>"+ct+"</div></div>"}).join("")}
+function qs(m,btn){document.querySelectorAll("#qb .q").forEach(function(b){b.classList.remove("on")});if(btn)btn.classList.add("on");var l=la();if(m==="top5"||m==="top10"){var n=m==="top5"?5:10;sel=raw.filter(function(r){return r.date===l}).sort(function(a,b){return b.listeners-a.listeners}).slice(0,n).map(function(r){return r.artist})}else if(["HYBE","SM","YG","BP","JYP"].indexOf(m)>=0){sel=raw.filter(function(r){return r.date===l&&r.label===m}).map(function(r){return r.artist})}else if(m==="bts"){sel=BM.filter(function(a){return raw.some(function(r){return r.artist===a})})}else if(m==="bp"){sel=BPM.filter(function(a){return raw.some(function(r){return r.artist===a})})}else{sel=[]}rAC()}
+function rmA(a){sel=sel.filter(function(x){return x!==a});rAC()}
+function rAC(){var dates=gD();var ph=document.getElementById("pills");var h="";for(var i=0;i<sel.length;i++){var a=sel[i];var r=raw.find(function(r){return r.artist===a});var lb=r?r.label:"";h+="<span class='pill' style='background:"+artistColor(a,i)+"'><span class='lt "+lb+"'>"+lb+"</span> "+a+" <span class='x' data-a='"+a+"'>\u00D7</span></span>"}ph.innerHTML=h;ph.querySelectorAll(".x").forEach(function(el){el.onclick=function(){rmA(el.getAttribute("data-a"))}});var sixAgo=new Date();sixAgo.setMonth(sixAgo.getMonth()-6);var minD=sixAgo.toISOString().slice(0,10);var mi=Math.max(0,dates.findIndex(function(d){return d>=minD}));var ds=[];for(var i=0;i<sel.length;i++){(function(a,idx){ds.push({label:a,data:dates.map(function(d){var r=raw.find(function(r){return r.date===d&&r.artist===a});return r?r.listeners:null}),borderColor:artistColor(a,idx),borderWidth:2,tension:.3,pointRadius:0,pointHoverRadius:5,spanGaps:true,fill:false})})(sel[i],i)}if(ch.ac)ch.ac.destroy();ch.ac=new Chart(document.getElementById("ac"),{type:"line",data:{labels:dates,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},annotation:{annotations:bEA(sel,dates)},tooltip:{mode:"index",intersect:false,callbacks:{label:function(c){return c.dataset.label+": "+fN(c.parsed.y)}}},zoom:{pan:{enabled:true,mode:"x"},zoom:{wheel:{enabled:true},pinch:{enabled:true},mode:"x"}}},onClick:function(ev,els,chart){handleChartClick(ev,chart)},scales:{x:{min:dates[mi],ticks:{maxTicksLimit:15,font:{size:11},color:"#8888a8"},grid:{color:"#1c1c2e"}},y:{ticks:{callback:function(v){return fM(v)},font:{size:11},color:"#8888a8"},grid:{color:"#1c1c2e"}}},interaction:{mode:"nearest",axis:"x",intersect:false}}})}
+function resetZ(){if(ch.ac)ch.ac.resetZoom()}
+/* 차트를 좌우로 이동 (direction: -1=왼쪽, +1=오른쪽)
+   zoom plugin의 pan() API를 사용해서 안정적으로 이동 */
+function panChart(direction){
+  if(!ch.ac)return;
+  var chart=ch.ac;
+  // chart area width의 25%만큼 픽셀 이동 (direction=+1: 오른쪽 보기 → 화면은 왼쪽으로 밀림)
+  var chartArea=chart.chartArea;
+  if(!chartArea)return;
+  var shiftPx=(chartArea.right-chartArea.left)*0.3;
+  // zoom plugin의 pan 메서드 호출 (x 음수 = 오른쪽으로 시야 이동)
+  if(typeof chart.pan==="function"){
+    chart.pan({x:-shiftPx*direction},undefined,"default");
+  }
+}
+/* 차트 클릭 시 annotation 아이콘 위인지 체크 후 팝업 */
+function handleChartClick(ev,chart){
+  try{
+    var anns=chart.options.plugins.annotation.annotations;
+    if(!anns)return;
+    var rect=chart.canvas.getBoundingClientRect();
+    var mx=ev.native?ev.native.offsetX:ev.x;
+    var my=ev.native?ev.native.offsetY:ev.y;
+    // 모든 annotation 돌면서 클릭 좌표랑 가까운 것 찾기
+    var best=null,bestDist=999;
+    Object.keys(anns).forEach(function(k){
+      var ann=anns[k];
+      if(!ann._title)return; // 우리 이벤트 라벨만
+      // Chart.js가 렌더링 후 annotation element에 x,y 저장함
+      var annEl=chart._plugins&&chart._plugins._cache?null:null;
+      // 우회: chart.getDatasetMeta로 해당 date의 좌표 계산
+      var xScale=chart.scales.x,yScale=chart.scales.y;
+      if(!xScale||!yScale)return;
+      var ax=xScale.getPixelForValue(ann.xValue)+(ann.xAdjust||0);
+      var ay=yScale.getPixelForValue(ann.yValue)+(ann.yAdjust||0);
+      var dx=mx-ax,dy=my-ay;
+      var dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<20&&dist<bestDist){ // 아이콘 반경 20px 안
+        bestDist=dist;
+        best={ann:ann,x:ax,y:ay};
+      }
+    });
+    if(best){
+      if(ev.native)ev.native._isAnnClick=true;
+      evPopShowDirect(best.ann,best.x,best.y,chart);
+    }
+  }catch(err){console.warn("handleChartClick err",err);}
+}
+/* ann 데이터 직접 받아서 팝업 표시 */
+function evPopShowDirect(ann,iconX,iconY,chart){
+  var fakeCtx={element:{options:ann,x:iconX,y:iconY},chart:chart};
+  evPopShow(fakeCtx);
+}
+/* 이벤트 툴팁 DOM (한 번만 생성) */
+var evTip=document.createElement("div");
+evTip.style.cssText="position:fixed;background:#14141f;color:#e8e8f0;border:2px solid #2a2a3e;border-radius:16px;padding:0;font-family:'DM Sans',sans-serif;z-index:99999;display:none;box-shadow:0 16px 48px rgba(0,0,0,.75);min-width:280px;max-width:360px;overflow:hidden";
+document.body.appendChild(evTip);
+document.addEventListener("click",function(e){
+  if(evTip.style.display==="block"&&!evTip.contains(e.target)){
+    if(e._isAnnClick)return;
+    evTipHide();
+  }
+});
+function evPopShow(ctx){
+  try{
+    var opts=(ctx&&ctx.element&&ctx.element.options)||(ctx&&ctx.options)||{};
+    if(!opts._title)return;
+    if(ctx.event&&ctx.event.native)ctx.event.native._isAnnClick=true;
+    var typeNameKo={comeback:"컴백",tour:"공연/투어",festival:"페스티벌",other:"기타"}[opts._type]||"이벤트";
+    var labelBadgeStyle={
+      HYBE:"background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)",
+      SM:"background:#f472b6;color:#fff",
+      YG:"background:rgba(10,10,15,.85);color:#fef08a;border:1px solid #fef08a",
+      JYP:"background:rgba(59,130,246,.2);color:#3b82f6",
+      BP:"background:#0a0a0f;color:#ff69b4;border:1px dashed #ff69b4"
+    }[opts._label]||"background:#2a2a3e;color:#fff";
+    var noteHtml=opts._note?'<div style="color:#b8b8d0;font-size:13px;line-height:1.55;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:8px">'+escapeHtml(opts._note)+'</div>':"";
+    evTip.innerHTML=
+      // 상단 아티스트 색 그라데이션 바
+      '<div style="background:linear-gradient(90deg,'+opts._artColor+' 0%,'+hexToRgba(opts._artColor,0.4)+' 100%);height:4px"></div>'
+      // 본문
+      +'<div style="padding:20px 22px">'
+        // 큰 아이콘 + 타입 명
+        +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'
+          +'<div style="width:44px;height:44px;border-radius:12px;background:'+hexToRgba(opts._artColor,0.15)+';display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid '+opts._artColor+'">'+opts._typeIcon+'</div>'
+          +'<div>'
+            +'<div style="font-size:11px;color:#8888a8;text-transform:uppercase;letter-spacing:1px;font-weight:600">'+typeNameKo+'</div>'
+            +'<div style="font-size:17px;font-weight:700;color:#fff;margin-top:2px">'+escapeHtml(opts._title)+'</div>'
+          +'</div>'
+        +'</div>'
+        // 비고
+        +noteHtml
+        // 하단 메타 (아티스트 + 기획사 배지 + 날짜)
+        +'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid #2a2a3e">'
+          +'<div style="display:flex;align-items:center;gap:8px">'
+            +'<span style="'+labelBadgeStyle+';padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.5px">'+escapeHtml(opts._label||"")+'</span>'
+            +'<span style="font-weight:600;color:'+opts._artColor+';font-size:14px">'+escapeHtml(opts._artist)+'</span>'
+          +'</div>'
+          +'<div style="color:#6666aa;font-size:12px;font-family:monospace">'+opts._date+'</div>'
+        +'</div>'
+      +'</div>';
+    evTip.style.borderColor=opts._artColor||"#2a2a3e";
+    evTip.style.display="block";
+    evTip.onclick=function(){evTipHide()};
+    var el=ctx.element||ctx;
+    var chart=ctx.chart||(el&&el.chart);
+    if(chart&&chart.canvas){
+      var rect=chart.canvas.getBoundingClientRect();
+      var x=rect.left+(el.x||el.centerX||0);
+      var y=rect.top+(el.y||el.centerY||0);
+      var tipW=320,tipH=200;
+      var left=x+22,top=y-tipH/2;
+      if(left+tipW>window.innerWidth-10)left=x-tipW-22;
+      if(top<10)top=10;
+      if(top+tipH>window.innerHeight-10)top=window.innerHeight-tipH-10;
+      evTip.style.left=left+"px";
+      evTip.style.top=top+"px";
+    }
+  }catch(err){console.warn("evPopShow err",err);}
+}
+function evTipHide(){evTip.style.display="none"}
+function escapeHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+/* 이벤트 날짜를 차트 x축 라벨(=월별 date) 중 가장 가까운 것으로 스냅 */
+function snapDate(evDate,dates){
+  if(!dates.length)return null;
+  if(isTBD(evDate))return null; // TBD(분기표기)는 차트 마커 안 뜸
+  if(dates.indexOf(evDate)>=0)return evDate;
+  // 차트 데이터 범위 바깥(미래 또는 너무 과거)이면 표시하지 않음
+  var firstDate=dates[0],lastDate=dates[dates.length-1];
+  if(evDate<firstDate||evDate>lastDate)return null;
+  // 범위 안쪽일 때만 가장 가까운 날짜로 스냅
+  var best=dates[0],bd=Math.abs(new Date(evDate)-new Date(dates[0]));
+  for(var i=1;i<dates.length;i++){
+    var d=Math.abs(new Date(evDate)-new Date(dates[i]));
+    if(d<bd){bd=d;best=dates[i]}
+  }
+  return best;
+}
+/* 선택된 아티스트의 이벤트들을 Chart.js annotation 객체로 변환
+   - 아이콘을 해당 아티스트 라인의 해당 시점 위에 배치
+   - 배경색 = 아티스트 색 (누구 이벤트인지)
+   - 이모지 = 이벤트 타입 (뭐 했는지) */
+function bEA(selected,dates){
+  var anns={};
+  if(!EV||!EV.length)return anns;
+  // 아티스트별 색깔 맵 (라인 색과 동일)
+  var colorMap={};
+  for(var i=0;i<selected.length;i++)colorMap[selected[i]]=artistColor(selected[i],i);
+  // (아티스트,날짜) → 청취자수 lookup
+  function getListeners(artist,date){
+    var r=raw.find(function(r){return r.artist===artist&&r.date===date});
+    return r?r.listeners:null;
+  }
+  // 같은 (아티스트, 날짜) 조합은 한번에 묶기 (같은 자리에 여러 타입 아이콘)
+  var bucket={};
+  for(var i=0;i<EV.length;i++){
+    var e=EV[i];
+    if(selected.indexOf(e.a)<0)continue;
+    if(!EVF[e.t])continue;
+    var sd=snapDate(e.d,dates);
+    if(!sd)continue;
+    var key=e.a+"|"+sd;
+    if(!bucket[key])bucket[key]={artist:e.a,date:sd,items:[]};
+    bucket[key].items.push(e);
+  }
+  var idx=0;
+  Object.keys(bucket).forEach(function(k){
+    var b=bucket[k];
+    var artColor=colorMap[b.artist]||"#888";
+    var artLabel=(raw.find(function(r){return r.artist===b.artist})||{}).label||"";
+    var yVal=getListeners(b.artist,b.date);
+    if(yVal===null)return;
+    b.items.forEach(function(e,i){
+      var cfg=EVCFG[e.t];
+      if(!cfg)return;
+      var offset=(i-(b.items.length-1)/2)*20;
+      anns["lb"+idx+"_"+i]={
+        type:"label",
+        xValue:b.date,
+        yValue:yVal,
+        xAdjust:offset,
+        yAdjust:-16, // 라인 바로 위 (차트 영역 안쪽 유지)
+        content:[cfg.icon],
+        font:{size:15,weight:"bold"},
+        color:"#fff",
+        backgroundColor:artColor, // 아티스트 라인 색 = 누구인지
+        borderColor:"rgba(255,255,255,0.95)",
+        borderWidth:2,
+        borderRadius:14,
+        padding:{top:3,bottom:3,left:5,right:5},
+        callout:{display:false},
+        _artist:b.artist,
+        _label:artLabel,
+        _date:b.date,
+        _title:e.ti||cfg.label,
+        _note:e.n||"",
+        _type:e.t,
+        _typeColor:cfg.color,
+        _typeIcon:cfg.icon,
+        _typeLabel:cfg.label,
+        _artColor:artColor,
+        enter:function(ctx){if(ctx.chart&&ctx.chart.canvas)ctx.chart.canvas.style.cursor="pointer"},
+        leave:function(ctx){if(ctx.chart&&ctx.chart.canvas)ctx.chart.canvas.style.cursor="default"}
+      };
+    });
+    idx++;
+  });
+  return anns;
+}
+/* #RRGGBB → rgba(r,g,b,a) */
+function hexToRgba(hex,a){
+  var h=hex.replace("#","");
+  if(h.length===3)h=h.split("").map(function(c){return c+c}).join("");
+  var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);
+  return "rgba("+r+","+g+","+b+","+a+")";
+}
+/* 이벤트 필터 토글 */
+document.querySelectorAll(".evchip").forEach(function(el){
+  el.addEventListener("click",function(){
+    var t=el.getAttribute("data-ev");
+    if(t==="off"){
+      EVF={comeback:false,tour:false,festival:false,other:false};
+      document.querySelectorAll(".evchip").forEach(function(c){
+        if(c.getAttribute("data-ev")!=="off")c.classList.remove("on");
+      });
+    }else{
+      EVF[t]=!EVF[t];
+      el.classList.toggle("on");
+    }
+    if(ch.ac&&sel.length){rAC();}
+  });
+});
+function rRank(){var l=la(),p=pv(),lf=document.getElementById("rl").value;document.getElementById("rd").textContent=l;var d=raw.filter(function(r){return r.date===l});if(lf)d=d.filter(function(r){return r.label===lf});d.sort(function(a,b){return b.listeners-a.listeners});var h="";for(var i=0;i<d.length;i++){var r=d[i];var y=p?raw.find(function(x){return x.date===p&&x.artist===r.artist}):null;var df=y?r.listeners-y.listeners:null;var pc=y&&y.listeners>0?(df/y.listeners*100):null;var dc=df!==null?"<span class='"+(df>=0?"pos":"neg")+"'>"+(df>=0?"+":"")+fN(df)+"</span>":"<span class='neu'>-</span>";var pcc=pc!==null?"<span class='"+(pc>=0?"pos":"neg")+"'>"+(pc>=0?"+":"")+pc.toFixed(2)+"%</span>":"<span class='neu'>-</span>";h+="<tr><td>"+(i+1)+"</td><td><span class='lt "+r.label+"'>"+r.label+"</span></td><td><strong>"+r.artist+"</strong></td><td class='n'>"+fN(r.listeners)+"</td><td class='n'>"+dc+"</td><td class='n'>"+pcc+"</td></tr>"}document.querySelector("#rt tbody").innerHTML=h}
+function copyR(){var l=la(),p=pv(),lf=document.getElementById("rl").value;var d=raw.filter(function(r){return r.date===l});if(lf)d=d.filter(function(r){return r.label===lf});d.sort(function(a,b){return b.listeners-a.listeners});var t="#\tLabel\tArtist\tListeners\tDiff\tChg%\n";for(var i=0;i<d.length;i++){var r=d[i];var y=p?raw.find(function(x){return x.date===p&&x.artist===r.artist}):null;var df=y?r.listeners-y.listeners:"";var pc=y&&y.listeners>0?((r.listeners-y.listeners)/y.listeners*100).toFixed(2)+"%":"";t+=(i+1)+"\t"+r.label+"\t"+r.artist+"\t"+r.listeners+"\t"+df+"\t"+pc+"\n"}navigator.clipboard.writeText(t).then(function(){alert("Copied!")})}
+function rMat(){var dates=gD(),lf=document.getElementById("tl").value;var arts=gA();if(lf)arts=arts.filter(function(a){var r=raw.find(function(r){return r.artist===a});return r&&r.label===lf});var l=la();arts.sort(function(a,b){var ra=raw.find(function(r){return r.date===l&&r.artist===a});var rb=raw.find(function(r){return r.date===l&&r.artist===b});return(rb?rb.listeners:0)-(ra?ra.listeners:0)});var h="<thead><tr><th>Label</th><th>Artist</th>";for(var di=0;di<dates.length;di++)h+="<th class='n'>"+dates[di]+"</th>";h+="</tr></thead><tbody>";for(var ai=0;ai<arts.length;ai++){var a=arts[ai];var r=raw.find(function(r){return r.artist===a});h+="<tr><td><span class='lt "+(r?r.label:"")+"'>"+(r?r.label:"")+"</span></td><td>"+a+"</td>";for(var di=0;di<dates.length;di++){var rr=raw.find(function(r){return r.date===dates[di]&&r.artist===a});h+="<td class='n'>"+(rr?fN(rr.listeners):"-")+"</td>"}h+="</tr>"}h+="</tbody>";document.getElementById("mt").innerHTML=h}
+function copyM(){var dates=gD(),lf=document.getElementById("tl").value;var arts=gA();if(lf)arts=arts.filter(function(a){var r=raw.find(function(r){return r.artist===a});return r&&r.label===lf});var l=la();arts.sort(function(a,b){var ra=raw.find(function(r){return r.date===l&&r.artist===a});var rb=raw.find(function(r){return r.date===l&&r.artist===b});return(rb?rb.listeners:0)-(ra?ra.listeners:0)});var t="Label\tArtist\t"+dates.join("\t")+"\n";for(var ai=0;ai<arts.length;ai++){var a=arts[ai];var r=raw.find(function(r){return r.artist===a});var row=(r?r.label:"")+"\t"+a;for(var di=0;di<dates.length;di++){var rr=raw.find(function(r){return r.date===dates[di]&&r.artist===a});row+="\t"+(rr?rr.listeners:"")}t+=row+"\n"}navigator.clipboard.writeText(t).then(function(){alert("Copied!")})}
+function dlC(){var dates=gD(),arts=gA(),l=la();arts.sort(function(a,b){var ra=raw.find(function(r){return r.date===l&&r.artist===a});var rb=raw.find(function(r){return r.date===l&&r.artist===b});return(rb?rb.listeners:0)-(ra?ra.listeners:0)});var t="label,artist,"+dates.join(",")+"/n";for(var ai=0;ai<arts.length;ai++){var a=arts[ai];var r=raw.find(function(r){return r.artist===a});var row=(r?r.label:"")+","+a;for(var di=0;di<dates.length;di++){var rr=raw.find(function(r){return r.date===dates[di]&&r.artist===a});row+=","+(rr?rr.listeners:"")}t+=row+"\n"}var b=new Blob(["\uFEFF"+t],{type:"text/csv"});var u=URL.createObjectURL(b);var el=document.createElement("a");el.href=u;el.download="spotify_"+l+".csv";el.click()}
+function rLC(){var dates=gD();var sixAgo=new Date();sixAgo.setMonth(sixAgo.getMonth()-6);var minD=sixAgo.toISOString().slice(0,10);var mi=Math.max(0,dates.findIndex(function(d){return d>=minD}));var ds=["HYBE","SM","YG","BP","JYP"].map(function(lb){return{label:lb,data:dates.map(function(d){return raw.filter(function(r){return r.date===d&&r.label===lb}).reduce(function(s,r){return s+r.listeners},0)}),borderColor:LC[lb],borderWidth:2.5,borderDash:LC_DASH[lb]||[],tension:.3,pointRadius:0,pointHoverRadius:5}});if(ch.lc)ch.lc.destroy();ch.lc=new Chart(document.getElementById("lc"),{type:"line",data:{labels:dates,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top",labels:{color:"#8888a8"}},tooltip:{callbacks:{label:function(c){return c.dataset.label+": "+fN(c.parsed.y)}}},zoom:{pan:{enabled:true,mode:"x"},zoom:{wheel:{enabled:true},pinch:{enabled:true},mode:"x"}}},scales:{x:{min:dates[mi],ticks:{maxTicksLimit:15,color:"#8888a8"},grid:{color:"#1c1c2e"}},y:{ticks:{callback:function(v){return fM(v)},color:"#8888a8"},grid:{color:"#1c1c2e"}}}}})}
+function rPie(){var l=la(),lbs=["HYBE","SM","YG","BP","JYP"];var data=lbs.map(function(lb){return raw.filter(function(r){return r.date===l&&r.label===lb}).reduce(function(s,r){return s+r.listeners},0)});if(ch.pie)ch.pie.destroy();ch.pie=new Chart(document.getElementById("pc"),{type:"doughnut",data:{labels:lbs,datasets:[{data:data,backgroundColor:lbs.map(function(l){return LC[l]}),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"right",labels:{color:"#8888a8",padding:16}},tooltip:{callbacks:{label:function(c){var t=data.reduce(function(s,v){return s+v},0);return c.label+": "+fN(c.parsed)+" ("+(c.parsed/t*100).toFixed(1)+"%)"}}}}}})}
+document.querySelectorAll(".tab").forEach(function(t){t.addEventListener("click",function(){document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active")});document.querySelectorAll(".sec").forEach(function(x){x.classList.remove("active")});t.classList.add("active");document.getElementById(t.dataset.s).classList.add("active")})});
+/* === 다가오는 이벤트 탭 === */
+var UP_FILTER="all";
+function upFilter(type,btn){
+  UP_FILTER=type;
+  document.querySelectorAll("#upcoming .q").forEach(function(b){b.classList.remove("on")});
+  if(btn)btn.classList.add("on");
+  rUpcoming();
+}
+function isTBD(dateStr){
+  // YYYY-Qn 형식(2026-Q2 등)이면 TBD로 간주
+  return /^\d{4}-Q[1-4]$/.test(String(dateStr||""));
+}
+function tbdLabel(dateStr){
+  // 2026-Q2 → "2026년 2분기"
+  var m=String(dateStr||"").match(/^(\d{4})-Q([1-4])$/);
+  if(!m)return dateStr;
+  return m[1]+"년 "+m[2]+"분기";
+}
+function daysUntil(dateStr){
+  if(isTBD(dateStr))return 99999; // TBD는 항상 맨 뒤 정렬
+  // 로컬 타임존 기준으로 날짜 비교
+  var today=new Date();today.setHours(0,0,0,0);
+  var parts=dateStr.split("-");
+  var target=new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2]));
+  return Math.round((target-today)/(1000*60*60*24));
+}
+function ddayClass(d){
+  if(d>=99999)return "dlater"; // TBD
+  if(d<=0)return "d0";
+  if(d<=7)return "d7";
+  if(d<=30)return "d30";
+  return "dlater";
+}
+function ddayText(d){
+  if(d>=99999)return "TBD";
+  if(d===0)return "TODAY";
+  if(d<0)return "D+"+(-d);
+  return "D-"+d;
+}
+function rUpcoming(){
+  var t=new Date();
+  // 로컬 타임존 기준으로 YYYY-MM-DD 만들기 (UTC 변환하면 하루 밀림)
+  var y=t.getFullYear(),m=String(t.getMonth()+1).padStart(2,"0"),d=String(t.getDate()).padStart(2,"0");
+  var todayStr=y+"-"+m+"-"+d;
+  // 오늘 이후 이벤트만 (오늘 이전은 제외, 오늘 이벤트는 포함)
+  var upEvents=EV.filter(function(e){
+    if(e.d<todayStr)return false;
+    if(UP_FILTER!=="all"&&e.t!==UP_FILTER)return false;
+    return true;
+  });
+  // 날짜순 정렬
+  upEvents.sort(function(a,b){return a.d.localeCompare(b.d)});
+  // 카운트 표시
+  document.getElementById("upCount").textContent=upEvents.length+"개 예정";
+  // 아티스트별 그룹화 (원본 순서 유지하되, 각 그룹 내에서는 시간순)
+  var groups={};
+  var artistOrder=[];
+  upEvents.forEach(function(e){
+    if(!groups[e.a]){groups[e.a]=[];artistOrder.push(e.a)}
+    groups[e.a].push(e);
+  });
+  // 각 그룹의 가장 빠른 이벤트 날짜로 그룹 정렬
+  artistOrder.sort(function(a,b){return groups[a][0].d.localeCompare(groups[b][0].d)});
+  var h="";
+  if(upEvents.length===0){
+    h='<div class="upEmpty"><div class="big">📭</div><div>예정된 이벤트가 없어</div><div style="margin-top:6px;font-size:12px">＋ 이벤트 추가 버튼으로 새 이벤트를 등록해봐</div></div>';
+  }else{
+    artistOrder.forEach(function(artist){
+      var events=groups[artist];
+      var artLabel=(raw.find(function(r){return r.artist===artist})||{}).label||"";
+      var artColor=AC[artist]||P[0];
+      h+='<div class="upGroup">';
+      h+='<div class="upGroupHdr">';
+      h+='<span class="lt '+artLabel+'">'+artLabel+'</span>';
+      h+='<span class="artName" style="color:'+artColor+'">'+escapeHtml(artist)+'</span>';
+      h+='<span class="cnt">'+events.length+'</span>';
+      h+='</div>';
+      events.forEach(function(e){
+        var d=daysUntil(e.d);
+        var cfg=EVCFG[e.t]||{icon:"?",label:e.t};
+        h+='<div class="upCard">';
+        h+='<div class="upDday '+ddayClass(d)+'"><span class="big">'+ddayText(d)+'</span><span class="small">'+cfg.icon+'</span></div>';
+        h+='<div class="upInfo">';
+        h+='<div class="upType">'+cfg.icon+' '+cfg.label+'</div>';
+        h+='<div class="upTitle">'+escapeHtml(e.ti||cfg.label)+'</div>';
+        if(e.n)h+='<div class="upNote">'+escapeHtml(e.n)+'</div>';
+        h+='</div>';
+        h+='<div class="upDate">'+(isTBD(e.d)?tbdLabel(e.d):e.d)+'</div>';
+        h+='</div>';
+      });
+      h+='</div>';
+    });
+  }
+  document.getElementById("upList").innerHTML=h;
+}
+/* === 이벤트 추가 폼 === */
+function showAddForm(){
+  document.getElementById("addForm").style.display="block";
+  // 오늘 날짜 기본값
+  var t=new Date();
+  document.getElementById("af_date").value=t.toISOString().slice(0,10);
+  document.getElementById("af_artist").focus();
+}
+function hideAddForm(){
+  document.getElementById("addForm").style.display="none";
+  ["af_artist","af_title","af_note"].forEach(function(id){document.getElementById(id).value=""});
+}
+function addEvent(){
+  var date=document.getElementById("af_date").value;
+  var artist=document.getElementById("af_artist").value.trim();
+  var type=document.getElementById("af_type").value;
+  var title=document.getElementById("af_title").value.trim();
+  var note=document.getElementById("af_note").value.trim();
+  if(!date||!artist||!type||!title){
+    alert("날짜, 아티스트, 타입, 제목은 필수야!");
+    return;
+  }
+  // CSV 한 줄 (쉼표 포함 시 따옴표로 감싸기)
+  function esc(s){return s.indexOf(",")>=0||s.indexOf("\"")>=0?'"'+s.replace(/"/g,'""')+'"':s}
+  var csvLine=[date,esc(artist),type,esc(title),esc(note)].join(",");
+  // 현재 세션에 임시 추가 (탭 리프레시까진 보여줌)
+  EV.push({d:date,a:artist,t:type,ti:title,n:note});
+  // CSV 다운로드 (추가분만)
+  var blob=new Blob(["\uFEFF"+csvLine+"\n"],{type:"text/csv"});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url;a.download="new_event_"+date+".csv";a.click();
+  URL.revokeObjectURL(url);
+  hideAddForm();
+  rUpcoming();
+  if(ch.ac)rAC(); // 차트에도 반영
+  alert("추가됨!\n다운로드된 CSV 내용을 events.csv 맨 아래에 붙여넣고 빌드해줘.");
+}
+/* annotation 플러그인 등록 */
+if(window["chartjs-plugin-annotation"])Chart.register(window["chartjs-plugin-annotation"]);
+init();
+</script>
+</body></html>
