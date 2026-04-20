@@ -159,7 +159,7 @@ var LC={HYBE:"#ffffff",SM:"#f472b6",YG:"#eab308",BP:"#ff69b4",JYP:"#3b82f6"};
 /* YG는 순검정이면 안 보이니까 차트에선 노란색 계열로 보정. BP는 점선 처리 (SM과 구분) */
 var LC_DASH={BP:[8,4]};
 var BM=["BTS","Jimin","Jungkook","V","RM","SUGA","j-hope","Jin"];
-var LABEL_FALLBACK={"TWS":"HYBE","Hearts2Hearts":"HYBE","XngHan&Xoul":"HYBE","CORTIS":"HYBE"};
+var LABEL_FALLBACK={"TWS":"HYBE","Hearts2Hearts":"SM","XngHan&Xoul":"SM","CORTIS":"HYBE"};
 var BPM=["BLACKPINK","JISOO","JENNIE","ROSE","LISA"];
 var raw=[],ch={},sel=[];
 function init(){raw=ED.map(function(r){return{date:r.d,label:r.l,artist:r.a,listeners:r.m}});si();render()}
